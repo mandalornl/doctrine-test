@@ -1,0 +1,18 @@
+App\Entity\PageTranslation:
+    type: entity
+    table: page_translation
+    fields:
+        title:
+        body:
+            type: text
+            nullable: true
+        metaTitle:
+            column: meta_title
+            nullable: true
+        metaKeywords:
+            column: meta_keywords
+            nullable: true
+        metaDescription:
+            type: text
+            column: meta_description
+            nullable: true

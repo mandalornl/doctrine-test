@@ -1,0 +1,21 @@
+App\Entity\User:
+    type: entity
+    table: user
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    indexes:
+        name_idx:
+            columns: [name]
+
+    uniqueConstraints:
+        username_idx:
+            columns: [username]
+
+    fields:
+        name:
+        username:
+        password:

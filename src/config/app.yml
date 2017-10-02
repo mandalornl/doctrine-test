@@ -1,0 +1,13 @@
+debug: true
+
+projectName: 'doctrine-text'
+
+backend:
+    user: 'admin'
+    password: 'admin'
+
+mail:
+    to: 'info@softmedia.nl'
+    from: 'noreply@softmedia.nl'
+    fromName: 'Softmedia'
+    smtpHost: 'localhost:1025'

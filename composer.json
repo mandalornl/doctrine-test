@@ -1,0 +1,17 @@
+{
+    "name": "softmedia/doctrine-text",
+    "description": "Doctrine test",
+    "require": {
+        "doctrine/orm": "^2.5",
+        "symfony/yaml": "^3.3",
+        "php": "^7.0",
+        "symfony/process": "^3.3"
+    },
+    "license": "UNLICENSED",
+    "authors": [
+        {
+            "name": "Joost Berns",
+            "email": "joostb@softmedia.nl"
+        }
+    ]
+}

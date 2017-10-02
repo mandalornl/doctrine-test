@@ -1,0 +1,25 @@
+App\Entity\Menu:
+    type: entity
+    table: menu
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+#    oneToMany:
+#        children:
+#            targetEntity: App\Entity\Page
+#            joinTable:
+#                name: menu_to_page
+#                joinColumns:
+#                    menu_id:
+#                        referencedColumnName: id
+#                        onDelete: CASCADE
+#                inversedJoinColumns:
+#                    page_id:
+#                        referencedColumnName: id
+#                        onDelete: CASCADE
+
+    fields:
+        name:

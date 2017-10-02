@@ -1,0 +1,5 @@
+driver: 'pdo_mysql'
+hostname: 'localhost'
+user: 'dbuser'
+password: 'lh71WOLpyt'
+database: 'doctrinetest'
