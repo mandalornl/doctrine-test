@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Listener;
+namespace App\Listener\Behavior;
 
-use App\Entity\User;
-use App\Traits\Behavior\BlamableTrait;
+use App\Traits\Behavior\SoftDeletableTrait;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-class BlamableSubscriber implements EventSubscriber
+class SoftDeletableSubscriber implements EventSubscriber
 {
 	/**
 	 * {@inheritdoc}
@@ -50,22 +51,20 @@ class BlamableSubscriber implements EventSubscriber
 	{
 		$reflectionClass = $classMetadata->getReflectionClass();
 
-		if (!in_array(BlamableTrait::class, $reflectionClass->getTraitNames()))
+		if (!in_array(SoftDeletableTrait::class, $reflectionClass->getTraitNames()))
 		{
 			return;
 		}
 
-		if (!$classMetadata->hasAssociation('slug'))
+		if (!$classMetadata->hasAssociation('deleted'))
 		{
-			$classMetadata->mapManyToOne([
-				'fieldName' 	=> 'owner',
-				'fetch' 		=> ClassMetadata::FETCH_LAZY,
-				'targetEntity' 	=> User::class,
-				'joinColumn' 	=> [[
-					'name' 					=> 'owner_id',
-					'referencedColumnName' 	=> 'id',
-					'onDelete' 				=> 'SET NULL'
-				]]
+			$classMetadata->mapField([
+				'fieldName' => 'deleted',
+				'type' => 'boolean',
+				'nullable' => false,
+				'options' => [
+					'default' => 0
+				]
 			]);
 		}
 	}

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Traits\Behavior\BlamableTrait;
 use App\Traits\Behavior\SluggableTrait;
+use App\Traits\Behavior\SoftDeletableTrait;
+use App\Traits\Behavior\TaxonomyTrait;
 use App\Traits\Behavior\TimeStampableTrait;
 use App\Traits\Behavior\TranslatableTrait;
 
@@ -16,6 +18,8 @@ class Page
 	use TranslatableTrait;
 	use SluggableTrait;
 	use BlamableTrait;
+	use SoftDeletableTrait;
+	use TaxonomyTrait;
 
     /**
      * @var integer
@@ -31,19 +35,6 @@ class Page
      * @var boolean
      */
     private $published = 0;
-
-	/**
-	 * @var \Doctrine\Common\Collections\Collection
-	 */
-    private $taxonomies;
-
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		$this->taxonomies = new \Doctrine\Common\Collections\ArrayCollection();
-	}
 
     /**
      * Get id
@@ -102,44 +93,6 @@ class Page
     {
         return $this->published;
     }
-
-	/**
-	 * Add taxonomy
-	 *
-	 * @param \App\Entity\Taxonomy $taxonomy
-	 *
-	 * @return Page
-	 */
-	public function addTaxonomy(\App\Entity\Taxonomy $taxonomy)
-	{
-		$this->taxonomies[] = $taxonomy;
-
-		return $this;
-	}
-
-	/**
-	 * Remove taxonomy
-	 *
-	 * @param \App\Entity\Taxonomy $taxonomy
-	 *
-	 * @return Page
-	 */
-	public function removeTaxonomy(\App\Entity\Taxonomy $taxonomy)
-	{
-		$this->taxonomies->removeElement($taxonomy);
-
-		return $this;
-	}
-
-	/**
-	 * Get taxonomies
-	 *
-	 * @return \Doctrine\Common\Collections\Collection
-	 */
-	public function getTaxonomies()
-	{
-		return $this->taxonomies;
-	}
 
 	/**
 	 * {@inheritdoc}

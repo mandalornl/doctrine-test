@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listener;
+namespace App\Listener\Behavior;
 
 use App\Traits\Behavior\TimeStampableTrait;
 use Doctrine\Common\EventSubscriber;

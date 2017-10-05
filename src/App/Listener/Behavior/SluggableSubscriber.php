@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listener;
+namespace App\Listener\Behavior;
 
 use App\Helper\SlugifyHelper;
 use App\Traits\Behavior\SluggableTrait;

@@ -3,10 +3,12 @@
 namespace App;
 
 use App\Connection\Config as ConnectionConfig;
-use App\Listener\BlamableSubscriber;
-use App\Listener\SluggableSubscriber;
-use App\Listener\TimeStampableSubscriber;
-use App\Listener\TranslatableSubscriber;
+use App\Listener\Behavior\BlamableSubscriber;
+use App\Listener\Behavior\SluggableSubscriber;
+use App\Listener\Behavior\SoftDeletableSubscriber;
+use App\Listener\Behavior\TaxonomySubscriber;
+use App\Listener\Behavior\TimeStampableSubscriber;
+use App\Listener\Behavior\TranslatableSubscriber;
 use App\Traits\SingletonTrait;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
@@ -74,9 +76,11 @@ final class Core
 
 		$eventManager = new EventManager();
 		$eventManager->addEventSubscriber(new SluggableSubscriber());
+		$eventManager->addEventSubscriber(new SoftDeletableSubscriber());
 		$eventManager->addEventSubscriber(new BlamableSubscriber());
 		$eventManager->addEventSubscriber(new TimeStampableSubscriber());
 		$eventManager->addEventSubscriber(new TranslatableSubscriber());
+		$eventManager->addEventSubscriber(new TaxonomySubscriber());
 
 		return EntityManager::create([
 			'driver' => $connectionConfig->getDriver(),
