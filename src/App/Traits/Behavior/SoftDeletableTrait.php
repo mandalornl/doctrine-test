@@ -2,10 +2,14 @@
 
 namespace App\Traits\Behavior;
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait SoftDeletableTrait
 {
 	/**
 	 * @var bool
+	 * 
+	 * @ORM\Column(name="deleted", type="boolean", options={ "default" = 0 })
 	 */
 	protected $deleted = 0;
 
@@ -14,11 +18,11 @@ trait SoftDeletableTrait
 	 *
 	 * @param bool $deleted
 	 *
-	 * @return $this
+	 * @return SoftDeletableTrait
 	 */
-	public function setDeleted($deleted)
+	public function setDeleted(bool $deleted = false)
 	{
-		$this->deleted = (bool)$deleted;
+		$this->deleted = $deleted;
 
 		return $this;
 	}
@@ -28,7 +32,7 @@ trait SoftDeletableTrait
 	 *
 	 * @return bool
 	 */
-	public function getDeleted()
+	public function getDeleted(): bool
 	{
 		return $this->deleted;
 	}

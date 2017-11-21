@@ -3,48 +3,41 @@
 namespace App\Entity;
 
 use App\Traits\Behavior\BlamableTrait;
+use App\Traits\Behavior\IdableTrait;
 use App\Traits\Behavior\SluggableTrait;
 use App\Traits\Behavior\SoftDeletableTrait;
 use App\Traits\Behavior\TaxonomyTrait;
 use App\Traits\Behavior\TimeStampableTrait;
 use App\Traits\Behavior\TranslatableTrait;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Page
+ * @ORM\Table(name="page")
+ * @ORM\Entity()
  */
 class Page
 {
+	use IdableTrait;
 	use TimeStampableTrait;
-	use TranslatableTrait;
 	use SluggableTrait;
 	use BlamableTrait;
 	use SoftDeletableTrait;
+	use TranslatableTrait;
 	use TaxonomyTrait;
 
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var string
+	 *
+	 * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var boolean
+	 *
+	 * @ORM\Column(name="published", type="boolean", options={ "default" = 0 })
      */
     private $published = 0;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set name
@@ -53,7 +46,7 @@ class Page
      *
      * @return Page
      */
-    public function setName($name)
+    public function setName(string $name = null): Page
     {
         $this->name = $name;
 
@@ -65,7 +58,7 @@ class Page
      *
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -77,7 +70,7 @@ class Page
      *
      * @return Page
      */
-    public function setPublished($published)
+    public function setPublished(bool $published = false): Page
     {
         $this->published = $published;
 
@@ -89,7 +82,7 @@ class Page
      *
      * @return boolean
      */
-    public function getPublished()
+    public function getPublished(): bool
     {
         return $this->published;
     }
@@ -99,7 +92,7 @@ class Page
 	 *
 	 * @return PageTranslation
 	 */
-    public function translate($locale = null, $fallback = true)
+    public function translate(string $locale = null, bool $fallback = true): PageTranslation
 	{
 		return $this->doTranslate($locale, $fallback);
 	}
@@ -107,7 +100,15 @@ class Page
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getValueToSlugify()
+	public function getValueToSlugify(): string
+	{
+		return $this->name;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function __toString(): string
 	{
 		return $this->name;
 	}

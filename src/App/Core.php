@@ -5,7 +5,6 @@ namespace App;
 use App\Connection\Config as ConnectionConfig;
 use App\Listener\Behavior\BlamableSubscriber;
 use App\Listener\Behavior\SluggableSubscriber;
-use App\Listener\Behavior\SoftDeletableSubscriber;
 use App\Listener\Behavior\TaxonomySubscriber;
 use App\Listener\Behavior\TimeStampableSubscriber;
 use App\Listener\Behavior\TranslatableSubscriber;
@@ -16,7 +15,6 @@ use Doctrine\Common\EventManager;
 use Doctrine\Common\Proxy\Autoloader as ProxyAutoLoader;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 
 final class Core
 {
@@ -55,13 +53,12 @@ final class Core
 
 		$cache = $appConfig->getDebug() ? new ArrayCache() : new ApcuCache();
 
-		$driver = new SimplifiedYamlDriver([
-			$appConfig->getProjectDir() . '/src/config/doctrine' => 'App\Entity'
-		]);
-
 		$config = new Configuration();
 		$config->setMetadataCacheImpl($cache);
+
+		$driver = $config->newDefaultAnnotationDriver($appConfig->getProjectDir() . '/src/App/Entity', false);
 		$config->setMetadataDriverImpl($driver);
+
 		$config->setQueryCacheImpl($cache);
 		$config->setResultCacheImpl($cache);
 		$config->setProxyDir($appConfig->getCacheDir() . '/proxies');
@@ -76,7 +73,6 @@ final class Core
 
 		$eventManager = new EventManager();
 		$eventManager->addEventSubscriber(new SluggableSubscriber());
-		$eventManager->addEventSubscriber(new SoftDeletableSubscriber());
 		$eventManager->addEventSubscriber(new BlamableSubscriber());
 		$eventManager->addEventSubscriber(new TimeStampableSubscriber());
 		$eventManager->addEventSubscriber(new TranslatableSubscriber());

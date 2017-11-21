@@ -2,13 +2,10 @@
 
 namespace App\Listener\Behavior;
 
-use App\Traits\Behavior\TimeStampableTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Mapping\ClassMetadata;
 
 final class TimeStampableSubscriber implements EventSubscriber
 {
@@ -18,63 +15,9 @@ final class TimeStampableSubscriber implements EventSubscriber
 	public function getSubscribedEvents()
 	{
 		return [
-			Events::loadClassMetadata,
 			Events::prePersist,
 			Events::preUpdate
 		];
-	}
-
-	/**
-	 * On load class metadata
-	 *
-	 * @param LoadClassMetadataEventArgs $args
-	 */
-	public function loadClassMetadata(LoadClassMetadataEventArgs $args)
-	{
-		/**
-		 * @var ClassMetadata $classMetadata
-		 */
-		$classMetadata = $args->getClassMetadata();
-
-		if ($classMetadata->getReflectionClass() === null)
-		{
-			return;
-		}
-
-		$this->mapFields($classMetadata);
-	}
-
-	/**
-	 * Map fields
-	 *
-	 * @param ClassMetadata $classMetadata
-	 */
-	private function mapFields(ClassMetadata $classMetadata)
-	{
-		$reflectionClass = $classMetadata->getReflectionClass();
-
-		if (!in_array(TimeStampableTrait::class, $reflectionClass->getTraitNames()))
-		{
-			return;
-		}
-
-		foreach (['creationDate', 'modificationDate'] as $property)
-		{
-			if (!$classMetadata->hasAssociation($property))
-			{
-				$classMetadata->mapField([
-					'fieldName' => $property,
-					'columnName' => preg_replace_callback('#[A-Z]#', function(array $matches)
-					{
-						return '_' . strtolower($matches[0]);
-					}, $property),
-					'type' => 'datetime',
-					'options' => [
-						'default' => 'CURRENT_TIMESTAMP'
-					]
-				]);
-			}
-		}
 	}
 
 	/**
@@ -87,9 +30,9 @@ final class TimeStampableSubscriber implements EventSubscriber
 		$entity = $args->getObject();
 		$reflection = new \ReflectionClass($entity);
 
-		if ($reflection->hasProperty('creationDate'))
+		if ($reflection->hasProperty('createdAt'))
 		{
-			$property = $reflection->getProperty('creationDate');
+			$property = $reflection->getProperty('createdAt');
 			$property->setAccessible(true);
 
 			if (!$property->getValue($entity) instanceof \DateTime)
@@ -98,7 +41,7 @@ final class TimeStampableSubscriber implements EventSubscriber
 			}
 		}
 
-		$this->setModificationDate($entity, $reflection);
+		$this->setModifiedAt($entity, $reflection);
 	}
 
 	/**
@@ -108,24 +51,24 @@ final class TimeStampableSubscriber implements EventSubscriber
 	 */
 	public function preUpdate(PreUpdateEventArgs $args)
 	{
-		$this->setModificationDate($args->getObject());
+		$this->setModifiedAt($args->getObject());
 	}
 
 	/**
-	 * Set modification date
+	 * Set modified at
 	 *
 	 * @param object $entity
 	 * @param \ReflectionClass $reflection [optional]
 	 *
 	 * @return bool
 	 */
-	private function setModificationDate($entity, \ReflectionClass $reflection = null)
+	private function setModifiedAt($entity, \ReflectionClass $reflection = null)
 	{
 		$reflection = $reflection ?: new \ReflectionClass($entity);
 
-		if ($reflection->hasProperty('modificationDate'))
+		if ($reflection->hasProperty('modifiedAt'))
 		{
-			$property = $reflection->getProperty('modificationDate');
+			$property = $reflection->getProperty('modifiedAt');
 			$property->setAccessible(true);
 			$property->setValue($entity, new \DateTime());
 

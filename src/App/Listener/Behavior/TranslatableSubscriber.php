@@ -114,14 +114,14 @@ final class TranslatableSubscriber implements EventSubscriber
 			$classMetadata->mapField([
 				'id' 		=> true,
 				'fieldName' => 'id',
-				'type' 		=> 'integer'
+				'type' 		=> 'bigint'
 			]);
 
 			$classMetadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_IDENTITY);
 			$classMetadata->setIdGenerator(new IdentityGenerator());
 		}
 
-		$name = 'translation_idx';
+		$name = 'translation_uniq';
 		if (!isset($classMetadata->table['uniqueConstraints'][$name]))
 		{
 			$classMetadata->table['uniqueConstraints'][$name] = [

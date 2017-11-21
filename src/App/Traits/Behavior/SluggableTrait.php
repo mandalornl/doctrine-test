@@ -2,10 +2,14 @@
 
 namespace App\Traits\Behavior;
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait SluggableTrait
 {
 	/**
 	 * @var string
+	 *
+	 * @ORM\Column(name="slug", type="string", nullable=false)
 	 */
 	protected $slug;
 
@@ -16,7 +20,7 @@ trait SluggableTrait
 	 *
 	 * @return SluggableTrait
 	 */
-	public function setSlug($slug)
+	public function setSlug(string $slug = null)
 	{
 		$this->slug = $slug;
 
@@ -28,7 +32,7 @@ trait SluggableTrait
 	 *
 	 * @return string
 	 */
-	public function getSlug()
+	public function getSlug(): ?string
 	{
 		return $this->slug;
 	}
@@ -38,5 +42,5 @@ trait SluggableTrait
 	 *
 	 * @return string
 	 */
-	abstract public function getValueToSlugify();
+	abstract public function getValueToSlugify(): string;
 }

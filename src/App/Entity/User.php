@@ -2,44 +2,48 @@
 
 namespace App\Entity;
 
+use App\Traits\Behavior\IdableTrait;
 use App\Traits\Behavior\TimeStampableTrait;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * @ORM\Table(
+ *     name="user",
+ *     uniqueConstraints={
+ *	       @ORM\UniqueConstraint(name="username", columns={ "username" })
+ *	   },
+ *     indexes={
+ *     	   @ORM\Index(name="name_idx", columns={ "name" }),
+ *		   @ORM\Index(name="username_idx", columns={ "username" })
+ *	   }
+ * )
+ * @ORM\Entity()
  */
-class User
+class User implements OwnerInterface
 {
+	use IdableTrait;
 	use TimeStampableTrait;
 
-    /**
-     * @var integer
-     */
-    private $id;
-
-    /**
+	/**
      * @var string
+	 *
+	 * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+	 *
+	 * @ORM\Column(name="username", type="string", nullable=false)
      */
     private $username;
 
 	/**
 	 * @var string
+	 *
+	 * @ORM\Column(name="password", type="string", nullable=true)
 	 */
     private $password;
-
-    /**
-     * Get id
-	 *
-	 * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set name
@@ -48,7 +52,7 @@ class User
      *
      * @return User
      */
-    public function setName($name)
+    public function setName(string $name = null): User
     {
         $this->name = $name;
 
@@ -60,7 +64,7 @@ class User
      *
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -72,7 +76,7 @@ class User
      *
      * @return User
      */
-    public function setUsername($username)
+    public function setUsername(string $username = null): User
     {
         $this->username = $username;
 
@@ -84,7 +88,7 @@ class User
      *
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -96,7 +100,7 @@ class User
 	 *
 	 * @return User
 	 */
-    public function setPassword($password)
+    public function setPassword(string $password = null): User
 	{
 		$this->password = $password;
 
@@ -108,8 +112,16 @@ class User
 	 *
 	 * @return string
 	 */
-	public function getPassword()
+	public function getPassword(): ?string
 	{
 		return $this->password;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function __toString(): string
+	{
+		return $this->name;
 	}
 }

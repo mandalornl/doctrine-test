@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Traits\Behavior\TranslationTrait;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PageTranslation
+ * @ORM\Table(name="page_translation")
+ * @ORM\Entity()
  */
 class PageTranslation
 {
@@ -13,26 +15,36 @@ class PageTranslation
 
     /**
      * @var string
+	 *
+	 * @ORM\Column(name="title", type="string", nullable=true)
      */
     private $title;
 
     /**
      * @var string
+	 *
+	 * @ORM\Column(name="body", type="text", nullable=true)
      */
     private $body;
 
     /**
      * @var string
+	 *
+	 * @ORM\Column(name="meta_title", type="string", nullable=true)
      */
     private $metaTitle;
 
     /**
      * @var string
+	 *
+	 * @ORM\Column(name="meta_keywords", type="string", nullable=true)
      */
     private $metaKeywords;
 
     /**
      * @var string
+	 *
+	 * @ORM\Column(name="meta_description", type="text", nullable=true)
      */
     private $metaDescription;
 
@@ -44,7 +56,7 @@ class PageTranslation
      *
      * @return PageTranslation
      */
-    public function setTitle($title)
+    public function setTitle(string $title = null): PageTranslation
     {
         $this->title = $title;
 
@@ -56,7 +68,7 @@ class PageTranslation
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -68,7 +80,7 @@ class PageTranslation
      *
      * @return PageTranslation
      */
-    public function setBody($body)
+    public function setBody(string $body = null): PageTranslation
     {
         $this->body = $body;
 
@@ -80,7 +92,7 @@ class PageTranslation
      *
      * @return string
      */
-    public function getBody()
+    public function getBody(): ?string
     {
         return $this->body;
     }
@@ -92,7 +104,7 @@ class PageTranslation
      *
      * @return PageTranslation
      */
-    public function setMetaTitle($metaTitle)
+    public function setMetaTitle(string $metaTitle = null): PageTranslation
     {
         $this->metaTitle = $metaTitle;
 
@@ -104,7 +116,7 @@ class PageTranslation
      *
      * @return string
      */
-    public function getMetaTitle()
+    public function getMetaTitle(): ?string
     {
         return $this->metaTitle;
     }
@@ -116,7 +128,7 @@ class PageTranslation
      *
      * @return PageTranslation
      */
-    public function setMetaKeywords($metaKeywords)
+    public function setMetaKeywords(string $metaKeywords = null): PageTranslation
     {
         $this->metaKeywords = $metaKeywords;
 
@@ -128,7 +140,7 @@ class PageTranslation
      *
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): ?string
     {
         return $this->metaKeywords;
     }
@@ -140,7 +152,7 @@ class PageTranslation
      *
      * @return PageTranslation
      */
-    public function setMetaDescription($metaDescription)
+    public function setMetaDescription(string $metaDescription = null): PageTranslation
     {
         $this->metaDescription = $metaDescription;
 
@@ -152,7 +164,7 @@ class PageTranslation
      *
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
     }

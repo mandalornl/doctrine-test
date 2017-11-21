@@ -2,63 +2,69 @@
 
 namespace App\Traits\Behavior;
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait TimeStampableTrait
 {
 	/**
 	 * @var \DateTime
+	 *
+	 * @ORM\Column(name="created_at", type="datetime", options={ "default" = "CURRENT_TIMESTAMP" })
 	 */
-	protected $creationDate;
+	protected $createdAt;
 
 	/**
 	 * @var \DateTime
+	 *
+	 * @ORM\Column(name="modified_at", type="datetime", options={ "default" = "CURRENT_TIMESTAMP" })
 	 */
-	protected $modificationDate;
+	protected $modifiedAt;
 
 	/**
-	 * Set creation date
+	 * Set created at
 	 *
-	 * @param \DateTime $creationDate
+	 * @param \DateTime $createdAt
 	 *
 	 * @return TimeStampableTrait
 	 */
-	public function setCreationDate(\DateTime $creationDate)
+	public function setCreatedAt(\DateTime $createdAt)
 	{
-		$this->creationDate = $creationDate;
+		$this->createdAt = $createdAt;
 
 		return $this;
 	}
 
 	/**
-	 * Get creation date
+	 * Get created at
 	 *
 	 * @return \DateTime
 	 */
-	public function getCreationDate()
+	public function getCreatedAt(): ?\DateTime
 	{
-		return $this->creationDate;
+		return $this->createdAt;
 	}
 
 	/**
-	 * Set modification date
+	 * Set modified at
 	 *
-	 * @param \DateTime $modificationDate
+	 * @param \DateTime $modifiedAt
 	 *
 	 * @return TimeStampableTrait
 	 */
-	public function setModificationDate(\DateTime $modificationDate)
+	public function setModifiedAt(\DateTime $modifiedAt)
 	{
-		$this->modificationDate = $modificationDate;
+		$this->modifiedAt = $modifiedAt;
 
 		return $this;
 	}
 
 	/**
-	 * Get modification date
+	 * Get modified at
 	 *
 	 * @return \DateTime
 	 */
-	public function getModificationDate()
+	public function getModifiedAt(): ?\DateTime
 	{
-		return $this->modificationDate;
+		return $this->modifiedAt;
 	}
 }

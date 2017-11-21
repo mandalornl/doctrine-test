@@ -55,12 +55,12 @@ class BlamableSubscriber implements EventSubscriber
 			return;
 		}
 
-		if (!$classMetadata->hasAssociation('slug'))
+		if (!$classMetadata->hasAssociation('owner'))
 		{
 			$classMetadata->mapManyToOne([
 				'fieldName' 	=> 'owner',
 				'fetch' 		=> ClassMetadata::FETCH_LAZY,
-				'targetEntity' 	=> User::class,
+				'targetEntity' 	=> $reflectionClass->getMethod('getBlamableEntityClassName')->invoke(null),
 				'joinColumn' 	=> [[
 					'name' 					=> 'owner_id',
 					'referencedColumnName' 	=> 'id',

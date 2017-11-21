@@ -24,7 +24,7 @@ trait TranslationTrait
 	 *
 	 * @return int
 	 */
-	public function getId()
+	public function getId(): int
 	{
 		return $this->id;
 	}
@@ -60,7 +60,7 @@ trait TranslationTrait
 	 *
 	 * @return $this
 	 */
-	public function setLocale($locale)
+	public function setLocale(string $locale)
 	{
 		$this->locale = $locale;
 
@@ -72,7 +72,7 @@ trait TranslationTrait
 	 *
 	 * @return string
 	 */
-	public function getLocale()
+	public function getLocale(): ?string
 	{
 		return $this->locale;
 	}

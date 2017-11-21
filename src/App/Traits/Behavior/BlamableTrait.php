@@ -3,22 +3,23 @@
 namespace App\Traits\Behavior;
 
 use App\Entity\User;
+use App\Entity\OwnerInterface;
 
 trait BlamableTrait
 {
 	/**
-	 * @var User
+	 * @var OwnerInterface
 	 */
 	protected $owner;
 
 	/**
 	 * Set owner
 	 *
-	 * @param User $owner
+	 * @param OwnerInterface $owner
 	 *
 	 * @return BlamableTrait
 	 */
-	public function setOwner($owner)
+	public function setOwner(OwnerInterface $owner = null)
 	{
 		$this->owner = $owner;
 
@@ -28,10 +29,20 @@ trait BlamableTrait
 	/**
 	 * Get owner
 	 *
-	 * @return User
+	 * @return OwnerInterface
 	 */
-	public function getOwner()
+	public function getOwner(): ?OwnerInterface
 	{
 		return $this->owner;
+	}
+
+	/**
+	 * Get blamable entity class name
+	 *
+	 * @return string
+	 */
+	public static function getBlamableEntityClassName(): string
+	{
+		return User::class;
 	}
 }

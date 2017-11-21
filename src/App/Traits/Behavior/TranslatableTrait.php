@@ -30,7 +30,7 @@ trait TranslatableTrait
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __call($method, array $args)
+	public function __call(string $method, array $args)
 	{
 		foreach (['set', 'get'] as $methodType)
 		{
@@ -61,7 +61,7 @@ trait TranslatableTrait
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __set($name, $value)
+	public function __set(string $name, mixed $value)
 	{
 		return $this->proxySetValue($name, $value);
 	}
@@ -69,7 +69,7 @@ trait TranslatableTrait
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __get($name)
+	public function __get(string $name)
 	{
 		return $this->proxyGetValue($name);
 	}
@@ -82,7 +82,7 @@ trait TranslatableTrait
 	 *
 	 * @return TranslatableTrait
 	 */
-	private function proxySetValue($name, $value)
+	private function proxySetValue(string $name, mixed $value)
 	{
 		$reflection = new \ReflectionClass($this);
 		if (!$reflection->hasProperty($name))
@@ -104,7 +104,7 @@ trait TranslatableTrait
 	 *
 	 * @return mixed
 	 */
-	private function proxyGetValue($name)
+	private function proxyGetValue(string $name)
 	{
 		$reflection = new \ReflectionClass($this);
 		if (!$reflection->hasProperty($name))
@@ -124,7 +124,7 @@ trait TranslatableTrait
 	 *
 	 * @return TranslatableTrait
 	 */
-	public function setCurrentLocale($currentLocale)
+	public function setCurrentLocale(string $currentLocale)
 	{
 		$this->currentLocale = $currentLocale;
 
@@ -136,7 +136,7 @@ trait TranslatableTrait
 	 *
 	 * @return string
 	 */
-	public function getCurrentLocale()
+	public function getCurrentLocale(): string
 	{
 		return $this->currentLocale;
 	}
@@ -148,7 +148,7 @@ trait TranslatableTrait
 	 *
 	 * @return TranslatableTrait
 	 */
-	public function setDefaultLocale($defaultLocale)
+	public function setDefaultLocale(string $defaultLocale)
 	{
 		$this->defaultLocale = $defaultLocale;
 
@@ -160,7 +160,7 @@ trait TranslatableTrait
 	 *
 	 * @return string
 	 */
-	public function getDefaultLocale()
+	public function getDefaultLocale(): string
 	{
 		return $this->defaultLocale;
 	}
@@ -222,7 +222,7 @@ trait TranslatableTrait
 	/**
 	 * Remove new translation
 	 *
-	 * @param $translation
+	 * @param TranslationTrait $translation
 	 *
 	 * @return TranslatableTrait
 	 */
@@ -245,6 +245,8 @@ trait TranslatableTrait
 
 	/**
 	 * Merge new translations
+	 *
+	 * @return TranslatableTrait
 	 */
 	public function mergeNewTranslations()
 	{
@@ -261,6 +263,8 @@ trait TranslatableTrait
 			$this->addTranslation($translation);
 			$newTranslations->removeElement($translation);
 		}
+
+		return $this;
 	}
 
 	/**
@@ -271,7 +275,7 @@ trait TranslatableTrait
 	 *
 	 * @return mixed
 	 */
-	protected function doTranslate($locale = null, $fallback = true)
+	protected function doTranslate(string $locale = null, bool $fallback = true)
 	{
 		if ($locale === null)
 		{
@@ -318,7 +322,7 @@ trait TranslatableTrait
 	 *
 	 * @return mixed
 	 */
-	abstract public function translate($locale = null, $fallback = true);
+	abstract public function translate(string $locale = null, bool $fallback = true);
 
 	/**
 	 * Find translation by locale
@@ -326,9 +330,9 @@ trait TranslatableTrait
 	 * @param string $locale
 	 * @param bool $withNewTranslations
 	 *
-	 * @return TranslationTrait
+	 * @return mixed
 	 */
-	private function findTranslationByLocale($locale, $withNewTranslations = true)
+	private function findTranslationByLocale(string $locale, bool $withNewTranslations = true)
 	{
 		if (($translations = $this->getTranslations()) && $translations->containsKey($locale))
 		{
@@ -351,16 +355,16 @@ trait TranslatableTrait
 	 *
 	 * @param string $locale
 	 *
-	 * @return bool|string
+	 * @return string
 	 */
-	private function computeFallbackLocale($locale)
+	private function computeFallbackLocale(string $locale): ?string
 	{
 		if (strpos($locale, '_') === 2)
 		{
 			return substr($locale, 0, 2);
 		}
 
-		return false;
+		return null;
 	}
 
 	/**
@@ -368,7 +372,7 @@ trait TranslatableTrait
 	 *
 	 * @return string
 	 */
-	public static function getTranslationEntityClassName()
+	public static function getTranslationEntityClassName(): string
 	{
 		return __CLASS__ . 'Translation';
 	}

@@ -2,51 +2,28 @@
 
 namespace App\Entity;
 
+use App\Traits\Behavior\IdableTrait;
 use App\Traits\Behavior\TimeStampableTrait;
+use App\Traits\Behavior\TranslatableTrait;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Table(name="taxonomy")
+ * @ORM\Entity()
+ */
 class Taxonomy
 {
+	use IdableTrait;
 	use TimeStampableTrait;
-
-	/**
-	 * @var integer
-	 */
-	private $id;
-
-	/**
-	 * @var string
-	 */
-	private $name;
-
-	/**
-	 * Get id
-	 *
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	/**
-	 * Set name
-	 *
-	 * @param string $name
-	 *
-	 * @return Taxonomy
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
-
-		return $this;
-	}
+	use TranslatableTrait;
 
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @return TaxonomyTranslation
 	 */
-	public function getName()
+	public function translate(string $locale = null, bool $fallback = true): TaxonomyTranslation
 	{
-		return $this->name;
+		return $this->doTranslate($locale, $fallback);
 	}
 }
