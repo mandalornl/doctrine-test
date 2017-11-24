@@ -5,9 +5,11 @@ namespace App;
 use App\Connection\Config as ConnectionConfig;
 use App\Listener\Behavior\BlamableSubscriber;
 use App\Listener\Behavior\SluggableSubscriber;
+use App\Listener\Behavior\SortableSubscriber;
 use App\Listener\Behavior\TaxonomySubscriber;
 use App\Listener\Behavior\TimeStampableSubscriber;
 use App\Listener\Behavior\TranslatableSubscriber;
+use App\Listener\Behavior\CloneableSubscriber;
 use App\Traits\SingletonTrait;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
@@ -56,7 +58,9 @@ final class Core
 		$config = new Configuration();
 		$config->setMetadataCacheImpl($cache);
 
-		$driver = $config->newDefaultAnnotationDriver($appConfig->getProjectDir() . '/src/App/Entity', false);
+		$driver = $config->newDefaultAnnotationDriver([
+			$appConfig->getProjectDir() . '/src/App/Entity'
+		], false);
 		$config->setMetadataDriverImpl($driver);
 
 		$config->setQueryCacheImpl($cache);
@@ -74,9 +78,11 @@ final class Core
 		$eventManager = new EventManager();
 		$eventManager->addEventSubscriber(new SluggableSubscriber());
 		$eventManager->addEventSubscriber(new BlamableSubscriber());
-		$eventManager->addEventSubscriber(new TimeStampableSubscriber());
 		$eventManager->addEventSubscriber(new TranslatableSubscriber());
 		$eventManager->addEventSubscriber(new TaxonomySubscriber());
+		$eventManager->addEventSubscriber(new CloneableSubscriber());
+		$eventManager->addEventSubscriber(new SortableSubscriber());
+		$eventManager->addEventSubscriber(new TimeStampableSubscriber());
 
 		return EntityManager::create([
 			'driver' => $connectionConfig->getDriver(),

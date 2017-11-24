@@ -2,6 +2,7 @@
 
 namespace App\Listener\Behavior;
 
+use App\Entity\Behavior\TimeStampableTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -12,7 +13,7 @@ final class TimeStampableSubscriber implements EventSubscriber
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getSubscribedEvents()
+	public function getSubscribedEvents(): array
 	{
 		return [
 			Events::prePersist,
@@ -28,20 +29,22 @@ final class TimeStampableSubscriber implements EventSubscriber
 	public function prePersist(LifecycleEventArgs $args)
 	{
 		$entity = $args->getObject();
-		$reflection = new \ReflectionClass($entity);
+		$reflectionClass = new \ReflectionClass($entity);
 
-		if ($reflection->hasProperty('createdAt'))
+		if (!$this->hasTrait($reflectionClass))
 		{
-			$property = $reflection->getProperty('createdAt');
-			$property->setAccessible(true);
-
-			if (!$property->getValue($entity) instanceof \DateTime)
-			{
-				$property->setValue($entity, new \DateTime());
-			}
+			return;
 		}
 
-		$this->setModifiedAt($entity, $reflection);
+		$property = $reflectionClass->getProperty('createdAt');
+		$property->setAccessible(true);
+
+		if (!$property->getValue($entity) instanceof \DateTime)
+		{
+			$property->setValue($entity, new \DateTime());
+		}
+
+		$this->setModifiedAt($entity, $reflectionClass);
 	}
 
 	/**
@@ -51,30 +54,39 @@ final class TimeStampableSubscriber implements EventSubscriber
 	 */
 	public function preUpdate(PreUpdateEventArgs $args)
 	{
-		$this->setModifiedAt($args->getObject());
+		$entity = $args->getObject();
+		$reflectionClass = new \ReflectionClass($entity);
+
+		if (!$this->hasTrait($reflectionClass))
+		{
+			return;
+		}
+
+		$this->setModifiedAt($entity, $reflectionClass);
 	}
 
 	/**
 	 * Set modified at
 	 *
 	 * @param object $entity
-	 * @param \ReflectionClass $reflection [optional]
+	 * @param \ReflectionClass $reflectionClass
+	 */
+	private function setModifiedAt($entity, \ReflectionClass $reflectionClass)
+	{
+		$property = $reflectionClass->getProperty('modifiedAt');
+		$property->setAccessible(true);
+		$property->setValue($entity, new \DateTime());
+	}
+
+	/**
+	 * Check whether or not entity has trait
+	 *
+	 * @param \ReflectionClass $reflectionClass
 	 *
 	 * @return bool
 	 */
-	private function setModifiedAt($entity, \ReflectionClass $reflection = null)
+	private function hasTrait(\ReflectionClass $reflectionClass): bool
 	{
-		$reflection = $reflection ?: new \ReflectionClass($entity);
-
-		if ($reflection->hasProperty('modifiedAt'))
-		{
-			$property = $reflection->getProperty('modifiedAt');
-			$property->setAccessible(true);
-			$property->setValue($entity, new \DateTime());
-
-			return true;
-		}
-
-		return false;
+		return in_array(TimeStampableTrait::class, $reflectionClass->getTraitNames());
 	}
 }

@@ -2,19 +2,19 @@
 
 namespace App\Listener\Behavior;
 
+use App\Entity\Behavior\SluggableTrait;
 use App\Helper\SlugifyHelper;
-use App\Traits\Behavior\SluggableTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
-class SluggableSubscriber implements EventSubscriber
+final class SluggableSubscriber implements EventSubscriber
 {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getSubscribedEvents()
+	public function getSubscribedEvents(): array
 	{
 		return [
 			Events::prePersist,
@@ -46,27 +46,23 @@ class SluggableSubscriber implements EventSubscriber
 	 * Set slug
 	 *
 	 * @param object $entity
-	 * @param \ReflectionClass $reflection
-	 *
-	 * @return bool
+	 * @param \ReflectionClass $reflectionClass
 	 */
-	private function setSlug($entity, \ReflectionClass $reflection = null)
+	private function setSlug($entity, \ReflectionClass $reflectionClass = null)
 	{
-		$reflection = $reflection ?: new \ReflectionClass($entity);
+		$reflectionClass = $reflectionClass ?: new \ReflectionClass($entity);
 
-		if ($reflection->hasProperty('slug'))
+		if (!in_array(SluggableTrait::class, $reflectionClass->getTraitNames()))
 		{
-			$property = $reflection->getProperty('slug');
-			$property->setAccessible(true);
-
-			/**
-			 * @var SluggableTrait $entity
-			 */
-			$property->setValue($entity, SlugifyHelper::slugify($entity->getValueToSlugify()));
-
-			return true;
+			return;
 		}
 
-		return false;
+		$property = $reflectionClass->getProperty('slug');
+		$property->setAccessible(true);
+
+		/**
+		 * @var SluggableTrait $entity
+		 */
+		$property->setValue($entity, SlugifyHelper::slugify($entity->getValueToSlugify()));
 	}
 }

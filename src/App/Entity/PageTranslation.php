@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Traits\Behavior\TranslationTrait;
+use App\Entity\Behavior\TranslationTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Traits\Behavior\IdableTrait;
-use App\Traits\Behavior\TimeStampableTrait;
-use App\Traits\Behavior\TranslatableTrait;
+use App\Entity\Behavior\IdableTrait;
+use App\Entity\Behavior\TimeStampableTrait;
+use App\Entity\Behavior\TranslatableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

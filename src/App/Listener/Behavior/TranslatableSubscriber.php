@@ -2,8 +2,8 @@
 
 namespace App\Listener\Behavior;
 
-use App\Traits\Behavior\TranslatableTrait;
-use App\Traits\Behavior\TranslationTrait;
+use App\Entity\Behavior\TranslatableTrait;
+use App\Entity\Behavior\TranslationTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
@@ -15,7 +15,7 @@ final class TranslatableSubscriber implements EventSubscriber
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getSubscribedEvents()
+	public function getSubscribedEvents(): array
 	{
 		return [
 			Events::loadClassMetadata
@@ -101,7 +101,7 @@ final class TranslatableSubscriber implements EventSubscriber
 			]);
 		}
 
-		if (!$classMetadata->hasField('locale') && !$classMetadata->hasAssociation('locale'))
+		if (!$classMetadata->hasField('locale'))
 		{
 			$classMetadata->mapField([
 				'fieldName' => 'locale',

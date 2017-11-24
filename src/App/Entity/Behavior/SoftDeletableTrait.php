@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Behavior;
+namespace App\Entity\Behavior;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +18,7 @@ trait SoftDeletableTrait
 	 *
 	 * @param bool $deleted
 	 *
-	 * @return SoftDeletableTrait
+	 * @return $this
 	 */
 	public function setDeleted(bool $deleted = false)
 	{

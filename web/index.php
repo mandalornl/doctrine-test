@@ -91,16 +91,11 @@ if (($page = $em->getRepository(Page::class)->findOneBy(['slug' => 'home'])) ===
 	$em->flush();
 }
 
-//var_dump($page);
-
-$menu = $em->getRepository(Menu::class)->find(1);
-
-$encoder = new JsonEncoder();
-$normalizer = (new ObjectNormalizer())->setCircularReferenceHandler(function($object)
-{
-	return (string)$object;
-});
-
-header('content-type: application/json; charset=utf-8');
-$serializer = new Serializer([$normalizer], [$encoder]);
-echo $serializer->serialize($menu, 'json');
+//for ($i = 0; $i < 10; $i++)
+//{
+//	$clone = clone $page;
+//
+//	$em->persist($clone);
+//}
+//
+//$em->flush();

@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Traits\Behavior\IdableTrait;
-use App\Traits\Behavior\TimeStampableTrait;
+use App\Entity\Behavior\IdableTrait;
+use App\Entity\Behavior\SortableTrait;
+use App\Entity\Behavior\TimeStampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +17,7 @@ class Menu
 {
 	use IdableTrait;
 	use TimeStampableTrait;
+	use SortableTrait;
 
     /**
      * @var string
@@ -41,13 +43,6 @@ class Menu
 	 * @ORM\OrderBy({ "weight" = "ASC" })
 	 */
     private $children;
-
-	/**
-	 * @var int
-	 *
-	 * @ORM\Column(name="weight", type="integer", options={ "default" = 0 })
-	 */
-    private $weight = 0;
 
 	/**
 	 * Menu constructor
@@ -141,30 +136,6 @@ class Menu
 	public function getChildren()
 	{
 		return $this->children;
-	}
-
-	/**
-	 * Set weight
-	 *
-	 * @param int $weight
-	 *
-	 * @return Menu
-	 */
-	public function setWeight(int $weight = 0): Menu
-	{
-		$this->weight = $weight;
-
-		return $this;
-	}
-
-	/**
-	 * Get weight
-	 *
-	 * @return int
-	 */
-	public function getWeight(): int
-	{
-		return $this->weight;
 	}
 
 	/**

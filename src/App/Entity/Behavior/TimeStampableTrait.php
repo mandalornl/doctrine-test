@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Behavior;
+namespace App\Entity\Behavior;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,7 +25,7 @@ trait TimeStampableTrait
 	 *
 	 * @param \DateTime $createdAt
 	 *
-	 * @return TimeStampableTrait
+	 * @return $this
 	 */
 	public function setCreatedAt(\DateTime $createdAt)
 	{
@@ -49,7 +49,7 @@ trait TimeStampableTrait
 	 *
 	 * @param \DateTime $modifiedAt
 	 *
-	 * @return TimeStampableTrait
+	 * @return $this
 	 */
 	public function setModifiedAt(\DateTime $modifiedAt)
 	{
@@ -66,5 +66,14 @@ trait TimeStampableTrait
 	public function getModifiedAt(): ?\DateTime
 	{
 		return $this->modifiedAt;
+	}
+
+	/**
+	 * Clone timestamps
+	 */
+	protected function onCloneTimestamps()
+	{
+		$this->createdAt = null;
+		$this->modifiedAt = null;
 	}
 }

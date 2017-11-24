@@ -3,18 +3,18 @@
 namespace App\Listener\Behavior;
 
 use App\Entity\Taxonomy;
-use App\Traits\Behavior\TaxonomyTrait;
+use App\Entity\Behavior\TaxonomyTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-class TaxonomySubscriber implements EventSubscriber
+final class TaxonomySubscriber implements EventSubscriber
 {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getSubscribedEvents()
+	public function getSubscribedEvents(): array
 	{
 		return [
 			Events::loadClassMetadata
@@ -74,8 +74,7 @@ class TaxonomySubscriber implements EventSubscriber
 						'referenceColumnName' => 'id',
 						'onDelete' => 'CASCADE'
 					]]
-				],
-				'orderBy' => ['name' => 'ASC']
+				]
 			]);
 		}
 	}

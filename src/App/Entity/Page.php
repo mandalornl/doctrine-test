@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
-use App\Traits\Behavior\BlamableTrait;
-use App\Traits\Behavior\IdableTrait;
-use App\Traits\Behavior\SluggableTrait;
-use App\Traits\Behavior\SoftDeletableTrait;
-use App\Traits\Behavior\TaxonomyTrait;
-use App\Traits\Behavior\TimeStampableTrait;
-use App\Traits\Behavior\TranslatableTrait;
+use App\Entity\Behavior\BlamableTrait;
+use App\Entity\Behavior\IdableTrait;
+use App\Entity\Behavior\SluggableTrait;
+use App\Entity\Behavior\SoftDeletableTrait;
+use App\Entity\Behavior\SortableTrait;
+use App\Entity\Behavior\TaxonomyTrait;
+use App\Entity\Behavior\TimeStampableTrait;
+use App\Entity\Behavior\TranslatableTrait;
+use App\Entity\Behavior\CloneableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,12 +20,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Page
 {
 	use IdableTrait;
-	use TimeStampableTrait;
 	use SluggableTrait;
 	use BlamableTrait;
 	use SoftDeletableTrait;
 	use TranslatableTrait;
 	use TaxonomyTrait;
+	use SortableTrait;
+	use CloneableTrait;
+	use TimeStampableTrait;
 
     /**
      * @var string

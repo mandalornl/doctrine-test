@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Behavior;
+namespace App\Entity\Behavior;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -80,17 +80,17 @@ trait TranslatableTrait
 	 * @param string $name
 	 * @param mixed $value
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	private function proxySetValue(string $name, mixed $value)
 	{
-		$reflection = new \ReflectionClass($this);
-		if (!$reflection->hasProperty($name))
+		$reflectionClass = new \ReflectionClass($this);
+		if (!$reflectionClass->hasProperty($name))
 		{
 			return $this;
 		}
 
-		$property = $reflection->getProperty($name);
+		$property = $reflectionClass->getProperty($name);
 		$property->setAccessible(true);
 		$property->setValue($this, $value);
 
@@ -106,13 +106,13 @@ trait TranslatableTrait
 	 */
 	private function proxyGetValue(string $name)
 	{
-		$reflection = new \ReflectionClass($this);
-		if (!$reflection->hasProperty($name))
+		$reflectionClass = new \ReflectionClass($this);
+		if (!$reflectionClass->hasProperty($name))
 		{
 			return $this;
 		}
 
-		$property = $reflection->getProperty($name);
+		$property = $reflectionClass->getProperty($name);
 		$property->setAccessible(true);
 		return $property->getValue($this);
 	}
@@ -122,7 +122,7 @@ trait TranslatableTrait
 	 *
 	 * @param string $currentLocale
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	public function setCurrentLocale(string $currentLocale)
 	{
@@ -146,7 +146,7 @@ trait TranslatableTrait
 	 *
 	 * @param string $defaultLocale
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	public function setDefaultLocale(string $defaultLocale)
 	{
@@ -170,7 +170,7 @@ trait TranslatableTrait
 	 *
 	 * @param TranslationTrait $translation
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	public function addTranslation($translation)
 	{
@@ -185,7 +185,7 @@ trait TranslatableTrait
 	 *
 	 * @param TranslationTrait $translation
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	public function removeTranslation($translation)
 	{
@@ -197,7 +197,7 @@ trait TranslatableTrait
 	/**
 	 * Get translations
 	 *
-	 * @return Collection
+	 * @return ArrayCollection
 	 */
 	public function getTranslations()
 	{
@@ -209,7 +209,7 @@ trait TranslatableTrait
 	 *
 	 * @param TranslationTrait $translation
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	public function addNewTranslation($translation)
 	{
@@ -224,7 +224,7 @@ trait TranslatableTrait
 	 *
 	 * @param TranslationTrait $translation
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	public function removeNewTranslation($translation)
 	{
@@ -236,7 +236,7 @@ trait TranslatableTrait
 	/**
 	 * Get new translations
 	 *
-	 * @return Collection
+	 * @return ArrayCollection
 	 */
 	public function getNewTranslations()
 	{
@@ -246,7 +246,7 @@ trait TranslatableTrait
 	/**
 	 * Merge new translations
 	 *
-	 * @return TranslatableTrait
+	 * @return $this
 	 */
 	public function mergeNewTranslations()
 	{
@@ -270,8 +270,8 @@ trait TranslatableTrait
 	/**
 	 * Do translate
 	 *
-	 * @param string $locale
-	 * @param bool $fallback
+	 * @param string $locale [optional]
+	 * @param bool $fallback [optional]
 	 *
 	 * @return mixed
 	 */
@@ -302,7 +302,7 @@ trait TranslatableTrait
 			}
 		}
 
-		$className = static::getTranslationEntityClassName();
+		$className = self::getTranslationEntityClassName();
 
 		/**
 		 * @var TranslationTrait $translation
@@ -317,8 +317,8 @@ trait TranslatableTrait
 	/**
 	 * Translate
 	 *
-	 * @param string $locale
-	 * @param bool $fallback
+	 * @param string $locale [optional]
+	 * @param bool $fallback [optional]
 	 *
 	 * @return mixed
 	 */
@@ -328,7 +328,7 @@ trait TranslatableTrait
 	 * Find translation by locale
 	 *
 	 * @param string $locale
-	 * @param bool $withNewTranslations
+	 * @param bool $withNewTranslations [optional]
 	 *
 	 * @return mixed
 	 */
@@ -368,12 +368,24 @@ trait TranslatableTrait
 	}
 
 	/**
+	 * Clone translations
+	 */
+	protected function onCloneTranslations()
+	{
+		foreach ($this->translations as $translation)
+		{
+			$this->addTranslation(clone $translation);
+			$this->removeTranslation($translation);
+		}
+	}
+
+	/**
 	 * Get translation entity class name
 	 *
 	 * @return string
 	 */
 	public static function getTranslationEntityClassName(): string
 	{
-		return __CLASS__ . 'Translation';
+		return __CLASS__  . 'Translation';
 	}
 }

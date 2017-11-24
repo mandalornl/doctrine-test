@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Behavior;
+namespace App\Entity\Behavior;
 
 trait TranslationTrait
 {
@@ -82,7 +82,7 @@ trait TranslationTrait
 	 *
 	 * @return string
 	 */
-	public static function getTranslatableEntityClassName()
+	public static function getTranslatableEntityClassName(): string
 	{
 		return substr(__CLASS__, 0, -11);
 	}

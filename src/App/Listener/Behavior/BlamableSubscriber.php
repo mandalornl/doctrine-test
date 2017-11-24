@@ -2,19 +2,18 @@
 
 namespace App\Listener\Behavior;
 
-use App\Entity\User;
-use App\Traits\Behavior\BlamableTrait;
+use App\Entity\Behavior\BlamableTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-class BlamableSubscriber implements EventSubscriber
+final class BlamableSubscriber implements EventSubscriber
 {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getSubscribedEvents()
+	public function getSubscribedEvents(): array
 	{
 		return [
 			Events::loadClassMetadata

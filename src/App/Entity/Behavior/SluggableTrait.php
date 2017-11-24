@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Behavior;
+namespace App\Entity\Behavior;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +18,7 @@ trait SluggableTrait
 	 *
 	 * @param string $slug
 	 *
-	 * @return SluggableTrait
+	 * @return $this
 	 */
 	public function setSlug(string $slug = null)
 	{

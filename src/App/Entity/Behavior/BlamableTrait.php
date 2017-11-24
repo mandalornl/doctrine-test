@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Behavior;
+namespace App\Entity\Behavior;
 
 use App\Entity\User;
 use App\Entity\OwnerInterface;
@@ -17,7 +17,7 @@ trait BlamableTrait
 	 *
 	 * @param OwnerInterface $owner
 	 *
-	 * @return BlamableTrait
+	 * @return $this
 	 */
 	public function setOwner(OwnerInterface $owner = null)
 	{
